@@ -1,5 +1,6 @@
 package com.example.matthewkay.csci490_lab_6;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -16,12 +17,15 @@ import android.Manifest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     Button button;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
+    LatLng currentPos;
+    Intent intent;
 
 
 
@@ -42,10 +46,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get the Intent that started this activity and extract the string
-                Intent intent = getIntent();
-                mLastLocation = intent.getExtras().getParcelable("Location");
-                currentPos = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                if(checkLocationPermission()){
+                    intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    intent.putExtra("Location", mLastLocation);
+                    startActivity(intent);
+
+
+                }
+
+
+
+
             }
         });
 
